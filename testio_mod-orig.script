@@ -1,0 +1,79 @@
+/*** Comments ***/
+script of run of testio.lnx as provided for hw1
+While this was running, I typed "1234567890"
+This script shows:
+1. write works already.
+2. read can deliver previously typed-in chars ("typeahead" chars)
+3. read does not wait for chars yet, it just returns what's there already.
+/*** end of Comments ***/
+
+Script started on Tue 31 Jan 2017 07:23:35 AM EST
+tuser@tutor-vserver:~/cs444/hw1$ mtip -f testio.lnx
+For command help, type ~?
+For help on args, rerun without args
+Code starts at 0x100100
+Using board # 1 
+Please type <CR> to confirm console setting: 
+Setting console dev to COM2Console: colour EGA+ 80x25
+COM1 at 0x03f8 (irq = 4) is a 16550A
+COM2 at 0x02f8 (irq = 3) is a 16550A
+
+                 Welcome to UMB Tutor for the PC
+   UMB Tutor is a 32-bit protected-mode PC debugger/downloader,
+       based on Linux, UMB Tutor for m68k, and remote gdb.
+UMB Tutor is free software and you are welcome to distribute copies
+of it under certain conditions.  There is no warranty for this program.
+The copyright and warranty provisions follow the Gnu general public
+license, available for view in gdb and elsewhere.  Full sources available.
+--bugs, suggestions, questions to eoneil@cs.umb.edu
+
+Exception 3 at EIP=00057a9b: Breakpoint
+Tutor> ~downloading testio.lnx
+
+........Done.
+
+Download done, setting EIP to 100100.
+Tutor> go 100100
+Running with device TTY1
+
+Trying simple write(4 chars)...
+hi!
+write of 4 returned 4
+<doing delay>
+Trying longer write (9 chars)
+abcdefghiwrite of 9 returned 9
+<doing delay>
+
+Trying write of 80-char string...
+AABBCCDDEEFFGGHHIIJJKKLLMMNNOOPPQQRRSSTTUUVVWWXXYYZZ[[\\]]^^__``aabbccddeeffgghh
+write returned 80
+<doing delay>
+
+Type 10 chars input to test typeahead while looping for delay...
+<doing delay>
+1234567890
+Got 6 chars into buf. Trying write of buf...
+123456
+Trying another 10 chars read right away...
+
+Got 0 chars on second read
+nothing in buffer
+
+
+Now turning echo off--
+
+Type 20 chars input, note lack of echoes...
+<doing delay>
+
+Trying write of buf...
+123456
+Asked for 20 characters; got 6
+Exception 3 at EIP=00100110: Breakpoint
+Tutor> 890
+Tutor> 
+Quit handler: 
+killing process 1850 Leaving board #1
+tuser@tutor-vserver:~/cs444/hw1$ exit
+exit
+
+Script done on Tue 31 Jan 2017 07:26:06 AM EST

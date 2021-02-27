@@ -1,0 +1,111 @@
+Script started on Tue 31 Jan 2017 08:00:48 AM EST
+]0;tuser@tutor-vserver: ~/cs444/hw1 tuser@tutor-vserver:~/cs444/hw1$ gdb testio.lnx
+GNU gdb (GDB) 7.0.1-debian
+Copyright (C) 2009 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i486-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/tuser/cs444/hw1/testio.lnx...done.
+(gdb) tar rem /dev/ttyS0
+Remote debugging using /dev/ttyS0
+0x00100100 in ?? ()
+(gdb) set $eip=0x100100
+(gdb) b main
+Breakpoint 1 at 0x100374: file testio.c, line 32.
+(gdb) c
+Continuing.
+
+Breakpoint 1, main () at testio.c:32
+warning: Source file is more recent than executable.
+32	  lib_console_dev = sys_get_console_dev();  /* SAPC support lib fn */
+(gdb) l
+27	{
+28	  char buf[BUFLEN];
+29	  int got, i, lib_console_dev, ldev;
+30	
+31	  /* Determine the SAPC's "console" device, the serial port for user i/o */
+32	  lib_console_dev = sys_get_console_dev();  /* SAPC support lib fn */
+33	  switch(lib_console_dev) {
+34	  case COM1: ldev = TTY0;	/* convert to our dev #'s */
+35	    break;
+36	  case COM2: ldev = TTY1;
+(gdb) l
+37	    break;
+38	  default: printf("Unknown console device\n");
+39	    return 1;
+40	  }
+41	  kprintf("Running with device TTY%d\n",ldev);
+42	  /* Now have a usable device to talk to with i/o package-- */
+43	
+44	  ioinit();  /* Initialize devices */
+45	  kprintf("\nTrying simple write(4 chars)...\n");
+46	  got = write(ldev,"hi!\n",4);
+(gdb) b 45
+Breakpoint 2 at 0x1003da: file testio.c, line 45.
+(gdb) c
+Continuing.
+
+Breakpoint 2, main () at testio.c:45
+45	  kprintf("\nTrying simple write(4 chars)...\n");
+(gdb) n
+46	  got = write(ldev,"hi!\n",4);
+(gdb) n
+47	  kprintf("write of 4 returned %d\n",got);
+(gdb) n
+48	  delay();  /* time for output to finish, once write-behind is working */
+(gdb) n
+50	  kprintf("Trying longer write (9 chars)\n");
+(gdb) n
+51	  got = write(ldev, "abcdefghi", 9);
+(gdb) l
+46	  got = write(ldev,"hi!\n",4);
+47	  kprintf("write of 4 returned %d\n",got);
+48	  delay();  /* time for output to finish, once write-behind is working */
+49	
+50	  kprintf("Trying longer write (9 chars)\n");
+51	  got = write(ldev, "abcdefghi", 9);
+52	  kprintf("write of 9 returned %d\n",got);
+53	  delay();  /* time for output to finish, once write-behind is working */
+54	
+55	  for (i = 0; i < BUFLEN; i++)
+(gdb) 
+56	      buf[i] = 'A'+ i/2;
+57	  kprintf("\nTrying write of %d-char string...\n", BUFLEN);
+58	  got = write(ldev, buf, BUFLEN);
+59	  kprintf("\nwrite returned %d\n", got);
+60	  delay();
+61	
+62	  kprintf("\nType 10 chars input to test typeahead while looping for delay...\n");
+63	  delay();
+64	  got = read(ldev, buf, 10);	/* should wait for all 10 chars, once fixed */
+65	  kprintf("\nGot %d chars into buf. Trying write of buf...\n", got);
+(gdb) b 62
+Breakpoint 3 at 0x1004d0: file testio.c, line 62.
+(gdb) c
+Continuing.
+
+Breakpoint 3, main () at testio.c:62
+62	  kprintf("\nType 10 chars input to test typeahead while looping for delay...\n");
+(gdb) c
+Continuing.
+
+Program received signal SIGTRAP, Trace/breakpoint trap.
+startupc () at startup.c:4
+4	startup.c: No such file or directory.
+	in startup.c
+(gdb) ^CQuit
+(gdb) ^CQuit
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [Remote target] will be killed.
+
+Quit anyway? (y or n) y
+]0;tuser@tutor-vserver: ~/cs444/hw1 tuser@tutor-vserver:~/cs444/hw1$ exit
+exit
+
+Script done on Tue 31 Jan 2017 08:10:44 AM EST
