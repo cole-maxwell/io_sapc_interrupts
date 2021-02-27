@@ -1,4 +1,4 @@
-Files for CS444 device-independent i/o package for SAPC
+Files for device-independent i/o package for SAPC
 
 io_public.h--applications-level header: dev indep i/o API protos
 tty_public.h--app-level header: tty-specific info
